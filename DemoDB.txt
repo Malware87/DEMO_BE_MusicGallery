@@ -1,0 +1,47 @@
+Cơ sở dữ liệu Users (Tài khoản người dùng):
+ID (Khóa chính)
+Username
+Password (được băm và mã hóa)
+Email
+Thời gian đăng ký
+Quyền truy cập (User hoặc Admin)
+
+Cơ sở dữ liệu Songs (Bài hát):
+ID (Khóa chính)
+Title (Tên bài hát)
+Artist (Nghệ sĩ)
+Genre (Thể loại)
+File Path (Đường dẫn đến tệp nhạc trên máy chủ)
+Lyrics (Lời bài hát)
+Lượt nghe
+Đánh giá (bằng số sao hoặc điểm số)
+Thời gian tạo
+
+Cơ sở dữ liệu Playlists (Danh sách phát):
+ID (Khóa chính)
+Name (Tên danh sách phát)
+Mô tả (Mô tả ngắn về danh sách phát)
+Người dùng sở hữu (liên kết với bảng Users)
+Thời gian tạo
+
+Cơ sở dữ liệu Playlist_Songs (Bài hát trong danh sách phát):
+ID (Khóa chính)
+Playlist ID (liên kết với bảng Playlists)
+Song ID (liên kết với bảng Songs)
+Thứ tự (để xác định thứ tự bài hát trong danh sách phát)
+
+Cơ sở dữ liệu Genres (Thể loại âm nhạc):
+ID (Khóa chính)
+Name (Tên thể loại)
+
+Cơ sở dữ liệu Rankings (Bảng xếp hạng):
+ID (Khóa chính)
+Song ID (liên kết với bảng Songs)
+Số lượt nghe
+Xếp hạng trung bình (dựa trên đánh giá của người dùng)
+
+
+Cơ sở dữ liệu Genres (Thể loại âm nhạc):
+ID (Khóa chính)
+Name (Tên thể loại)
+
