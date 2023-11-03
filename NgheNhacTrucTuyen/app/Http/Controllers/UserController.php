@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ChangePasswordMail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -60,6 +63,12 @@ class UserController extends Controller
         $username = $request->input('username');
         $password = $request->input('password');
         $email = $request->input('email');
+        $validator = Validator::make(['email' => $email], [
+            'email' => 'required|email',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Invalid email']);
+        }
         $user = User::where('username', $username)->orWhere('email', $email)->first();
         if ($user) {
             return response()->json(['message' => 'Username or Email already registered'], 401);
@@ -71,17 +80,33 @@ class UserController extends Controller
             'registered_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'role' => 'User'
         ]);
-        $id = User::where('username', $newUser->username)->select('id');
-        return response()->json(['message' => 'Registration successful', 'id' => $id], 200);
-    }
-    
-    function forgot()
-    {
-
+        $id = User::where('username', $newUser->username)->select('id')->first();
+        return response()->json(['message' => 'Registration successful', 'id' => $id->id], 200);
     }
 
-    function changepwd()
+    function forgot(Request $request)
     {
+        $email = $request->get('email');
+        $validator = Validator::make(['email' => $email], [
+            'email' => 'required|email',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Invalid email']);
+        }
+        Mail::to($email)->send(new ChangePasswordMail());
+        return response()->json(['message' => 'Send email'], 200);
+    }
 
+    function changepwd(Request $request)
+    {
+        $id = $request->get('id');
+        $oldPassword = $request->get('oldPassword');
+        $newPassword = $request->get('newPassword');
+        $user = User::where('id', $id)->first();
+        if (!password_verify($oldPassword, $user->password)) {
+            return response()->json(['message' => 'Old password is not correct'], 401);
+        }
+        User::where('id', $id)->update(['password' => bcrypt($newPassword)]);
+        return response()->json(['message' => 'Change password successfully'], 200);
     }
 }
