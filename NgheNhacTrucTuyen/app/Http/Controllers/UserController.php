@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -33,7 +35,8 @@ class UserController extends Controller
 //    }
 
 
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         $username = $request->input('username');
         $password = $request->input('password');
 
@@ -41,9 +44,9 @@ class UserController extends Controller
         $user = User::where('username', $username)->first();
         if ($user) {
             // Kiểm tra mật khẩu
-            if ($password == $user->password) {
+            if (password_verify($password, $user->password)) {
                 // Đăng nhập thành công
-                return response()->json(['user' => $user, 'message' => 'Login Success'], 200);
+                return response()->json(['message' => 'Login Success', 'id' => $user->id], 200);
             }
         }
         // Đăng nhập thất bại
@@ -52,16 +55,33 @@ class UserController extends Controller
     }
 
 
-    function register(){
+    function register(Request $request)
+    {
+        $username = $request->input('username');
+        $password = $request->input('password');
+        $email = $request->input('email');
+        $user = User::where('username', $username)->orWhere('email', $email)->first();
+        if ($user) {
+            return response()->json(['message' => 'Username or Email already registered'], 401);
+        }
+        $newUser = User::create([
+            'username' => $username,
+            'password' => bcrypt($password),
+            'email' => $email,
+            'registered_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'role' => 'User'
+        ]);
+        $id = User::where('username', $newUser->username)->select('id');
+        return response()->json(['message' => 'Registration successful', 'id' => $id], 200);
+    }
+    
+    function forgot()
+    {
 
     }
-    function logout(){
 
-    }
-    function forgot(){
-
-    }
-    function changepwd(){
+    function changepwd()
+    {
 
     }
 }
