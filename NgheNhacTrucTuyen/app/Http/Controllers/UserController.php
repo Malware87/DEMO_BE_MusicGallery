@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\ChangePasswordMail;
+use App\Mail\ForgotPasswordMail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -93,7 +93,7 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['message' => 'Invalid email']);
         }
-        Mail::to($email)->send(new ChangePasswordMail());
+        Mail::to($email)->send(new ForgotPasswordMail());
         return response()->json(['message' => 'Send email'], 200);
     }
 

@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ChangePasswordMail extends Mailable
+class ForgotPasswordMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -37,7 +37,7 @@ class ChangePasswordMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.changepassword',
+            view: 'emails.forgotpasswordmmail',
         );
     }
 
