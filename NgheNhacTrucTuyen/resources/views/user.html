@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+Your name is : <p id="name"></p>
+Your email is : <p id="email"></p>
+
+<script>
+    // Lấy tham số 'id' từ URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('id');
+
+    // Gọi API để lấy thông tin người dùng dựa trên userId
+    fetch(`http://127.0.0.1:8000/api/user/${userId}`)
+        .then(response => response.json())
+        .then(data => {
+            // Hiển thị thông tin người dùng lên trang
+            document.getElementById('name').textContent = `${data.user.username}`;
+            document.getElementById('email').textContent = `${data.user.email}`;
+        })
+        .catch(error => {
+            console.error('Lỗi khi lấy thông tin người dùng:', error);
+        });
+</script>
+
+</body>
+</html>
