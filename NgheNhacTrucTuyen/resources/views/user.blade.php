@@ -3,18 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script>
-        // Kiểm tra sự tồn tại của localStorage
-        const session_id = localStorage.getItem('SESSION')
-        if (localStorage.getItem('SESSION') === null) {
-            // Nếu không có localStorage, chuyển hướng đến trang đăng nhập
-            window.location.href = 'login.html';
-            console.log(session_id)
-        }
-        else {
-            console.log(session_id)
-        }
-    </script>
 </head>
 <body>
 Your name is : <p id="name"></p>
@@ -22,9 +10,18 @@ Your email is : <p id="email"></p>
 <button id="logout">Đăng Xuất</button>
 
 <script>
+    // Lấy thông tin người dùng từ session
+    const userId = {{ session('userId') }};
+    if (!userId) {
+        // Nếu userId không tồn tại, có thể chuyển hướng người dùng đến trang đăng nhập hoặc xử lý khác.
+        window.location.href = 'login.blade.php';
+    }
+</script>
+
+<script>
     // Lấy tham số 'id' từ URL
     const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('id');
+    const id = urlParams.get('id');
 
     // Gọi API để lấy thông tin người dùng dựa trên userId
     fetch(`http://127.0.0.1:8000/api/user/${userId}`)
@@ -41,10 +38,8 @@ Your email is : <p id="email"></p>
     // Bắt sự kiện click cho nút Đăng Xuất
     const logoutButton = document.getElementById('logout');
     logoutButton.addEventListener('click', () => {
-        // Xóa dữ liệu localStorage
-        localStorage.removeItem('SESSION');
-        // Chuyển hướng người dùng về trang đăng nhập hoặc trang khác
-        window.location.href = 'login.html';
+        // Xóa session và chuyển hướng người dùng về trang đăng nhập hoặc trang khác
+        window.location.href = 'login.blade.php';
     });
 </script>
 </body>

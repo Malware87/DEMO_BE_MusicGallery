@@ -6,19 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="../css/login.css">
-    <!--    <link rel="stylesheet" href="../js/login.js">-->
-    <script>
-        // Kiểm tra sự tồn tại của localStorage
-        const session_id = localStorage.getItem("SESSION");
-        if (session_id !== null && session_id !== undefined) {
-            // Nếu có sessionStorage, chuyển hướng đến trang user.html
-            window.location.href = `user.html?id=${session_id}`;
-            console.log(session_id)
-        }
-        else {console.log(session_id)}
-
-    </script>
     <title>Music</title>
+    <script>
+        const session_id = @json(session('SESSION'));
+        if(session_id != null && session_id != undefined ){
+            window.location.href = `user?id=${session_id}`;
+        }
+    </script>
 </head>
 
 <body>
@@ -45,7 +39,7 @@
             <h1>Sign In</h1>
             <div class="social-icons">
                 <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
-                <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" class an="icon"><i class="fa-brands fa-facebook-f"></i></a>
                 <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
                 <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
             </div>
@@ -60,12 +54,12 @@
         <div class="toggle">
             <div class="toggle-panel toggle-left">
                 <h1>Welcome Back!</h1>
-                <p>Enter your personal details to use all of site features</p>
+                <p>Enter your personal details to use all site features</p>
                 <button class="hidden" id="login">Sign In</button>
             </div>
             <div class="toggle-panel toggle-right">
                 <h1>Hello, Friend!</h1>
-                <p>Register with your personal details to use all of site features</p>
+                <p>Register with your personal details to use all site features</p>
                 <button class="hidden" id="register">Sign Up</button>
             </div>
         </div>
@@ -93,24 +87,24 @@
         const password = loginForm.querySelector('input[type="password"]').value;
 
         // Gửi yêu cầu POST đến API đăng nhập
-        fetch('http://127.0.0.1:8000/api/login', {
+        fetch('{{ route('login') }}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
             },
             body: JSON.stringify({
                 email: email,
                 password: password,
             }),
         })
-            .then(response => response.json())
+    .then(response => response.json())
             .then(data => {
                 // Xử lý kết quả từ API đăng nhập ở đây
                 if (data.message === 'Login Success') {
-                    // Đăng nhập thành công, chuyển hướng đến trang user.blade.php và gọi API để lấy thông tin người dùng
+                    // Đăng nhập thành công, chuyển hướng đến trang user và gán SESSION
                     const userId = data.id;
-                    localStorage.setItem('SESSION', userId);
-                    window.location.href = `user.html?id=${userId}`;
+                    window.location.href = `user?id=${userId}`;
                 } else {
                     // Xử lý lỗi đăng nhập
                     console.error('Đăng nhập không thành công:', data.message);
@@ -129,10 +123,11 @@
         const password = registerForm.querySelector('input[type="password"]').value;
 
         // Gửi yêu cầu POST đến API đăng ký
-        fetch('http://127.0.0.1:8000/api/register', {
+        fetch('{{ route('register') }}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
             },
             body: JSON.stringify({
                 username: name,
@@ -140,7 +135,7 @@
                 password: password
             }),
         })
-            .then(response => response.json())
+    .then(response => response.json())
             .then(data => {
                 // Xử lý kết quả từ API đăng ký ở đây
             })
@@ -156,16 +151,17 @@
         const email = forgotForm.querySelector('input[type="email"]').value;
 
         // Gửi yêu cầu POST đến API quên mật khẩu
-        fetch('http://127.0.0.1:8000/api/forgot', {
+        fetch('{{ route('forgot') }}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
             },
             body: JSON.stringify({
                 email: email
             }),
         })
-            .then(response => response.json())
+    .then(response => response.json())
             .then(data => {
                 // Xử lý kết quả từ API quên mật khẩu ở đây
             })

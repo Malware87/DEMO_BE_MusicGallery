@@ -20,9 +20,9 @@ loginForm.addEventListener('submit', (e) => {
         .then(data => {
             // Xử lý kết quả từ API đăng nhập ở đây
             if (data.message === 'Login Success') {
-                // Đăng nhập thành công, chuyển hướng đến trang user.html với tham số id
+                // Đăng nhập thành công, chuyển hướng đến trang user.blade.php với tham số id
                 const userId = data.id;
-                window.location.href = `../views/user.html`;
+                window.location.href = `../views/user.blade.php`;
             } else {
                 // Xử lý lỗi đăng nhập
                 console.error('Đăng nhập không thành công:', data.message);
