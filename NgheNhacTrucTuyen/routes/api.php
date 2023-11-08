@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // User routes
+
 Route::post('/user/login', [UserController::class, 'login']);
 Route::post('/user/register', [UserController::class, 'register']);
 Route::post('/user/forgot', [UserController::class, 'forgot']);
@@ -34,3 +35,5 @@ Route::post('/user/changepwd', [UserController::class, 'changepwd']);
 
 // Songs routes
 Route::post('/song/addsong', [SongController::class, 'addsong']);
+
+Route::get('/user/{id}', [UserController::class, 'getUserById']);

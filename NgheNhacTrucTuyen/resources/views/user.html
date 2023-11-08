@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        // Kiểm tra sự tồn tại của localStorage
+        const session_id = localStorage.getItem('SESSION')
+        if (localStorage.getItem('SESSION') === null) {
+            // Nếu không có localStorage, chuyển hướng đến trang đăng nhập
+            window.location.href = 'login.html';
+            console.log(session_id)
+        }
+        else {
+            console.log(session_id)
+        }
+    </script>
+</head>
+<body>
+Your name is : <p id="name"></p>
+Your email is : <p id="email"></p>
+<button id="logout">Đăng Xuất</button>
+
+<script>
+    // Lấy tham số 'id' từ URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('id');
+
+    // Gọi API để lấy thông tin người dùng dựa trên userId
+    fetch(`http://127.0.0.1:8000/api/user/${userId}`)
+        .then(response => response.json())
+        .then(data => {
+            // Hiển thị thông tin người dùng lên trang
+            document.getElementById('name').textContent = `${data.user.username}`;
+            document.getElementById('email').textContent = `${data.user.email}`;
+        })
+        .catch(error => {
+            console.error('Lỗi khi lấy thông tin người dùng:', error);
+        });
+
+    // Bắt sự kiện click cho nút Đăng Xuất
+    const logoutButton = document.getElementById('logout');
+    logoutButton.addEventListener('click', () => {
+        // Xóa dữ liệu localStorage
+        localStorage.removeItem('SESSION');
+        // Chuyển hướng người dùng về trang đăng nhập hoặc trang khác
+        window.location.href = 'login.html';
+    });
+</script>
+</body>
+</html>

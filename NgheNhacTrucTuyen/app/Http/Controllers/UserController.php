@@ -38,11 +38,13 @@ class UserController extends Controller {
 
 
     public function login(Request $request) {
-        $username = $request->input('username');
+
+        $email = $request->input('email');
+
         $password = $request->input('password');
 
         // Tìm người dùng theo tên người dùng
-        $user = User::where('username', $username)->first();
+        $user = User::where('email', $email)->first();
         if ($user) {
             // Kiểm tra mật khẩu
             if (password_verify($password, $user->password)) {
@@ -94,4 +96,17 @@ class UserController extends Controller {
         User::where('id', $id)->update(['password' => bcrypt($newPassword)]);
         return response()->json(['message' => 'Change password successfully'], 200);
     }
+
+    public function getUserById(Request $request, $id) {
+        // Tìm người dùng theo ID
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        // Trả về thông tin chi tiết của người dùng
+        return response()->json(['user' => $user], 200);
+    }
+
 }

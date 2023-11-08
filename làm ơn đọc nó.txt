@@ -5,3 +5,9 @@
 	php artisan migrate
 Models nằm ở app/Models - định nghĩa xong 
 Controller nằm ở app/Http/Controller - mới tạo chưa làm cc gì
+
+
+Chạy chương trình :
+khởi động terminal
+PS ....\DEMO_BE_MusicGallery> cd NgheNhacTrucTuyen
+PS ....\DEMO_BE_MusicGallery\NgheNhacTrucTuyen> php artisan serve
