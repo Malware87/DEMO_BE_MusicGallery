@@ -11,8 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
-class UserController extends Controller
-{
+class UserController extends Controller {
 //    // chưa chạy được
 //    public function login(Request $request){
 //        //$credentials = $request->only('username', 'password');
@@ -38,8 +37,7 @@ class UserController extends Controller
 //    }
 
 
-    public function login(Request $request)
-    {
+    public function login(Request $request) {
         $username = $request->input('username');
         $password = $request->input('password');
 
@@ -58,14 +56,11 @@ class UserController extends Controller
     }
 
 
-    function register(Request $request)
-    {
+    function register(Request $request) {
         $username = $request->input('username');
         $password = $request->input('password');
         $email = $request->input('email');
-        $validator = Validator::make(['email' => $email], [
-            'email' => 'required|email',
-        ]);
+        $validator = Validator::make(['email' => $email], ['email' => 'required|email',]);
         if ($validator->fails()) {
             return response()->json(['message' => 'Invalid email']);
         }
@@ -73,23 +68,14 @@ class UserController extends Controller
         if ($user) {
             return response()->json(['message' => 'Username or Email already registered'], 401);
         }
-        $newUser = User::create([
-            'username' => $username,
-            'password' => bcrypt($password),
-            'email' => $email,
-            'registered_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            'role' => 'User'
-        ]);
+        $newUser = User::create(['username' => $username, 'password' => bcrypt($password), 'email' => $email, 'registered_at' => Carbon::now()->format('Y-m-d H:i:s'), 'role' => 'User']);
         $id = User::where('username', $newUser->username)->select('id')->first();
         return response()->json(['message' => 'Registration successful', 'id' => $id->id], 200);
     }
 
-    function forgot(Request $request)
-    {
+    function forgot(Request $request) {
         $email = $request->get('email');
-        $validator = Validator::make(['email' => $email], [
-            'email' => 'required|email',
-        ]);
+        $validator = Validator::make(['email' => $email], ['email' => 'required|email',]);
         if ($validator->fails()) {
             return response()->json(['message' => 'Invalid email']);
         }
@@ -97,8 +83,7 @@ class UserController extends Controller
         return response()->json(['message' => 'Send email'], 200);
     }
 
-    function changepwd(Request $request)
-    {
+    function changepwd(Request $request) {
         $id = $request->get('id');
         $oldPassword = $request->get('oldPassword');
         $newPassword = $request->get('newPassword');

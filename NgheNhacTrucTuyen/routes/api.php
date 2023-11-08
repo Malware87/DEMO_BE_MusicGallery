@@ -27,7 +27,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // User routes
-Route::post('/login', [UserController::class, 'login']);
-Route::post('/register', [UserController::class, 'register']);
-Route::post('/forgot', [UserController::class, 'forgot']);
-Route::post('/changepwd', [UserController::class, 'changepwd']);
+Route::post('/user/login', [UserController::class, 'login']);
+Route::post('/user/register', [UserController::class, 'register']);
+Route::post('/user/forgot', [UserController::class, 'forgot']);
+Route::post('/user/changepwd', [UserController::class, 'changepwd']);
+
+// Songs routes
+Route::post('/song/addsong', [SongController::class, 'addsong']);

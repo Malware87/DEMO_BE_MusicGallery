@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Playlist;
 
-class PlaylistController extends Controller
-{
+class PlaylistController extends Controller {
     //
 }
