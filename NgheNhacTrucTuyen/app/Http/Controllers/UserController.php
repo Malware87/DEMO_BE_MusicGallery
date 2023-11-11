@@ -37,7 +37,7 @@ class UserController extends Controller {
 //    }
 
 
-    public function login(Request $request) {
+    public function Login(Request $request) {
 
         $email = $request->input('email');
 
@@ -58,7 +58,7 @@ class UserController extends Controller {
     }
 
 
-    function register(Request $request) {
+    function Register(Request $request) {
         $username = $request->input('username');
         $password = $request->input('password');
         $email = $request->input('email');
@@ -75,7 +75,7 @@ class UserController extends Controller {
         return response()->json(['message' => 'Registration successful', 'id' => $id->id], 200);
     }
 
-    function forgot(Request $request) {
+    function Forgot(Request $request) {
         $email = $request->get('email');
         $validator = Validator::make(['email' => $email], ['email' => 'required|email',]);
         if ($validator->fails()) {
@@ -85,7 +85,7 @@ class UserController extends Controller {
         return response()->json(['message' => 'Send email'], 200);
     }
 
-    function changepwd(Request $request) {
+    function ChangePwd(Request $request) {
         $id = $request->get('id');
         $oldPassword = $request->get('oldPassword');
         $newPassword = $request->get('newPassword');
@@ -97,7 +97,7 @@ class UserController extends Controller {
         return response()->json(['message' => 'Change password successfully'], 200);
     }
 
-    public function getUserById(Request $request, $id) {
+    public function GetUserById(Request $request, $id) {
         // Tìm người dùng theo ID
         $user = User::find($id);
 

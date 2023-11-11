@@ -9,7 +9,7 @@
     <title>Music</title>
     <script>
         const session_id = @json(session('SESSION'));
-        if(session_id != null && session_id != undefined ){
+        if (session_id != null) {
             window.location.href = `user?id=${session_id}`;
         }
     </script>
@@ -87,7 +87,7 @@
         const password = loginForm.querySelector('input[type="password"]').value;
 
         // Gửi yêu cầu POST đến API đăng nhập
-        fetch('{{ route('login') }}', {
+        fetch('http://127.0.0.1:8000/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -98,7 +98,7 @@
                 password: password,
             }),
         })
-    .then(response => response.json())
+            .then(response => response.json())
             .then(data => {
                 // Xử lý kết quả từ API đăng nhập ở đây
                 if (data.message === 'Login Success') {
@@ -123,7 +123,7 @@
         const password = registerForm.querySelector('input[type="password"]').value;
 
         // Gửi yêu cầu POST đến API đăng ký
-        fetch('{{ route('register') }}', {
+        fetch('http://127.0.0.1:8000/api/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -135,7 +135,7 @@
                 password: password
             }),
         })
-    .then(response => response.json())
+            .then(response => response.json())
             .then(data => {
                 // Xử lý kết quả từ API đăng ký ở đây
             })
@@ -151,7 +151,7 @@
         const email = forgotForm.querySelector('input[type="email"]').value;
 
         // Gửi yêu cầu POST đến API quên mật khẩu
-        fetch('{{ route('forgot') }}', {
+        fetch('http://127.0.0.1:8000/api/forgot', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -161,7 +161,7 @@
                 email: email
             }),
         })
-    .then(response => response.json())
+            .then(response => response.json())
             .then(data => {
                 // Xử lý kết quả từ API quên mật khẩu ở đây
             })

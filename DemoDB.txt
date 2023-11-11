@@ -40,8 +40,3 @@ Song ID (liên kết với bảng Songs)
 Số lượt nghe
 Xếp hạng trung bình (dựa trên đánh giá của người dùng)
 
-
-Cơ sở dữ liệu Genres (Thể loại âm nhạc):
-ID (Khóa chính)
-Name (Tên thể loại)
-
