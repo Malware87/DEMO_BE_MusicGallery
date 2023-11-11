@@ -28,4 +28,10 @@ class SongController extends Controller {
             return response()->json(['message' => 'Upload successfully'], 200);
         }
     }
+
+    public function Search(Request $request) {
+        $entry = $request->input('songName');
+        $searchResult = Song::where('title', 'LIKE', '%' . $entry . '%')->select('title', 'artist', 'genre', 'listen_count', 'rating')->get();
+        return response()->json($searchResult);
+    }
 }
