@@ -22,7 +22,8 @@ class SongController extends Controller {
             $file = $request->file('audio');
             $fileName = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('uploads'), $fileName);
-            $filePath = public_path('uploads') . DIRECTORY_SEPARATOR . $fileName;
+            $publicFolder = 'uploads';
+            $filePath = DIRECTORY_SEPARATOR . $publicFolder . DIRECTORY_SEPARATOR . $fileName;
             // $filePath = $request->file('audio')->storeAs('uploads', time() . '_' . $request->file('audio')->getClientOriginalName(), 'public');
             Song::create(['title' => $title, 'artist' => $artist, 'genre' => $genre, 'file_path' => $filePath, 'lyrics' => $lyrics]);
             return response()->json(['message' => 'Upload successfully'], 200);
@@ -32,6 +33,12 @@ class SongController extends Controller {
     public function Search(Request $request) {
         $entry = $request->input('songName');
         $searchResult = Song::where('title', 'LIKE', '%' . $entry . '%')->select('title', 'artist', 'genre', 'listen_count', 'rating')->get();
+        return response()->json($searchResult);
+    }
+
+    public function GetSong(Request $request) {
+        $entry = $request->input('songName');
+        $searchResult = Song::where('title', $entry)->select('title', 'artist', 'genre', 'file_path', 'listen_count', 'rating')->first();
         return response()->json($searchResult);
     }
 }
