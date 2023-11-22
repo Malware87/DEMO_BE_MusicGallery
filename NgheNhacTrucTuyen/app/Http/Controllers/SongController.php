@@ -31,14 +31,26 @@ class SongController extends Controller {
     }
 
     public function Search(Request $request) {
-        $entry = $request->input('songName');
-        $searchResult = Song::where('title', 'LIKE', '%' . $entry . '%')->select('title', 'artist', 'genre', 'listen_count', 'rating')->get();
-        return response()->json($searchResult);
+        if ($request->has('title')) {
+            $entry = $request->input('title');
+            $searchResult = Song::where('title', 'LIKE', '%' . $entry . '%')->select('id', 'title', 'artist', 'genre', 'listen_count', 'rating')->get();
+            return response()->json($searchResult);
+        }
+        if ($request->has('artist')) {
+            $entry = $request->input('artist');
+            $searchResult = Song::where('artist', 'LIKE', '%' . $entry . '%')->select('id', 'title', 'artist', 'genre', 'listen_count', 'rating')->get();
+            return response()->json($searchResult);
+        }
+        if ($request->has('genre')) {
+            $entry = $request->input('genre');
+            $searchResult = Song::where('genre', 'LIKE', '%' . $entry . '%')->select('id', 'title', 'artist', 'genre', 'listen_count', 'rating')->get();
+            return response()->json($searchResult);
+        }
     }
 
     public function GetSong(Request $request) {
-        $entry = $request->input('songName');
-        $searchResult = Song::where('title', $entry)->select('title', 'artist', 'genre', 'file_path', 'listen_count', 'rating')->first();
+        $entry = $request->input('id');
+        $searchResult = Song::where('id', $entry)->select('title', 'artist', 'genre', 'file_path', 'listen_count', 'rating')->first();
         return response()->json($searchResult);
     }
 }

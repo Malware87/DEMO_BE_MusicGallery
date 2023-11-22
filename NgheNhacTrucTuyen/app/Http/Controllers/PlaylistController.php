@@ -8,4 +8,7 @@ use App\Models\Playlist;
 
 class PlaylistController extends Controller {
     //
+    public function NewPlaylist(Request $request) {
+
+    }
 }

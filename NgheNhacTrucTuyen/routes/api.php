@@ -36,6 +36,6 @@ Route::post('/user/changepwd', [UserController::class, 'ChangePwd']);
 // Songs routes
 Route::post('/song/addsong', [SongController::class, 'AddSong']);
 Route::post('/song/search', [SongController::class, 'Search']);
-Route::post('/song/getsong', [SongController::class, 'getSong']);
+Route::post('/song/getsong', [SongController::class, 'GetSong']);
 
 Route::get('/user/{id}', [UserController::class, 'GetUserById']);
