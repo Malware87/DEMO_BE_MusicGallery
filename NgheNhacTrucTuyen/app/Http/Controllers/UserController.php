@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\ForgotPasswordMail;
 use Carbon\Carbon;
+use Illuminate\Database\Console\Migrations\ResetCommand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
@@ -76,6 +77,13 @@ class UserController extends Controller {
         return response()->json(['message' => 'Registration successful', 'id' => $id->id], 200);
     }
 
+    function UpdateUser(Request $request) {
+        $dataToKeep = $request->only(['avatar', 'username', 'email', 'role']);
+        $dataToKeep = array_filter($dataToKeep, function ($value) {
+            return $value !== null && $value !== '';
+        });
+    }
+
     function Forgot(Request $request) {
         $email = $request->get('email');
         $validator = Validator::make(['email' => $email], ['email' => 'required|email',]);
@@ -111,6 +119,12 @@ class UserController extends Controller {
     }
 
     public function GetUser(Request $request) {
+        if ($request->has('start')) {
+            $records = User::count();
+            $start = $request->input('start');
+            $output = User::select('id', 'avatar', 'username', 'email', 'registered_at', 'role')->orderBy('id')->skip($start)->take(10)->get();
+            return response()->json(['records' => $records, 'users' => $output]);
+        }
         return response()->json(User::select('id', 'avatar', 'username', 'email', 'registered_at', 'role')->get());
     }
 
