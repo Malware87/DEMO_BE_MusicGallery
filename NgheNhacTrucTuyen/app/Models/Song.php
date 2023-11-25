@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Song extends Model
 {
     protected $fillable = [
-        'title', 'artist', 'genre', 'file_path', 'lyrics', 'listen_count', 'rating',
+        'title', 'singerID', 'genre', 'file_path', 'lyrics', 'listen_count', 'rating',
     ];
 
     // Định nghĩa mối quan hệ giữa Song và Playlists
