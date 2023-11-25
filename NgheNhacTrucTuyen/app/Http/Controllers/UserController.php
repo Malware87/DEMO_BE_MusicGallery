@@ -109,4 +109,8 @@ class UserController extends Controller {
         return response()->json(['user' => $user], 200);
     }
 
+    public function GetUser(Request $request) {
+        return response()->json(User::select('avatar', 'username', 'email', 'registered_at', 'role')->get());
+    }
+
 }

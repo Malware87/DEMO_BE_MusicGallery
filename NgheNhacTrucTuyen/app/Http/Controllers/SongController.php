@@ -21,7 +21,7 @@ class SongController extends Controller {
             $lyrics = $request->input('lyrics');
             $file = $request->file('audio');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads'), $fileName);
+            $file->move(public_path('uploads/audio'), $fileName);
             $publicFolder = 'uploads';
             $filePath = DIRECTORY_SEPARATOR . $publicFolder . DIRECTORY_SEPARATOR . $fileName;
             // $filePath = $request->file('audio')->storeAs('uploads', time() . '_' . $request->file('audio')->getClientOriginalName(), 'public');
