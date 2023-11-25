@@ -63,6 +63,7 @@ class UserController extends Controller {
         $password = $request->input('password');
         $email = $request->input('email');
         $validator = Validator::make(['email' => $email], ['email' => 'required|email',]);
+        $imagePath = '\uploads\picture\default.png';
         if ($validator->fails()) {
             return response()->json(['message' => 'Invalid email']);
         }
@@ -70,7 +71,7 @@ class UserController extends Controller {
         if ($user) {
             return response()->json(['message' => 'Username or Email already registered'], 401);
         }
-        $newUser = User::create(['username' => $username, 'password' => bcrypt($password), 'email' => $email, 'registered_at' => Carbon::now()->format('Y-m-d H:i:s'), 'role' => 'User']);
+        $newUser = User::create(['username' => $username, 'password' => bcrypt($password), 'email' => $email, 'avatar' => $imagePath, 'registered_at' => Carbon::now()->format('Y-m-d H:i:s'), 'role' => 'User']);
         $id = User::where('username', $newUser->username)->select('id')->first();
         return response()->json(['message' => 'Registration successful', 'id' => $id->id], 200);
     }
@@ -109,4 +110,17 @@ class UserController extends Controller {
         return response()->json(['user' => $user], 200);
     }
 
+    public function GetUser(Request $request) {
+        return response()->json(User::select('id', 'avatar', 'username', 'email', 'registered_at', 'role')->get());
+    }
+
+    public function DeleteUser(Request $request) {
+        $userId = $request->input('id');
+        User::where('id', $userId)->delete();
+        if (User::where('id', $userId)->exists()) {
+            return response()->json(['message' => 'Xóa thất bại'], 500);
+        } else {
+            return response()->json(['message' => 'Xóa thành công']);
+        }
+    }
 }
