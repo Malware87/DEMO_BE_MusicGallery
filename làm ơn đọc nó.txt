@@ -11,3 +11,7 @@ Chạy chương trình :
 khởi động terminal
 PS ....\DEMO_BE_MusicGallery> cd NgheNhacTrucTuyen
 PS ....\DEMO_BE_MusicGallery\NgheNhacTrucTuyen> php artisan serve
+
+1 số lệnh thêm :
+    composer install
+
