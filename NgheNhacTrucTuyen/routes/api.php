@@ -33,6 +33,7 @@ Route::post('/user/register', [UserController::class, 'Register']);
 Route::post('/user/forgot', [UserController::class, 'Forgot']);
 Route::post('/user/changepwd', [UserController::class, 'ChangePwd']);
 Route::delete('/user', [UserController::class, 'DeleteUser']);
+Route::post('/user/update', [UserController::class, 'UpdateUser']);
 
 // Songs routes
 Route::post('/song/addsong', [SongController::class, 'AddSong']);

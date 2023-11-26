@@ -50,7 +50,7 @@ class UserController extends Controller {
             // Kiểm tra mật khẩu
             if (password_verify($password, $user->password)) {
                 // Đăng nhập thành công
-                return response()->json(['message' => 'Login Success', 'id' => $user->id], 200);
+                return response()->json(['message' => 'Login Success', 'id' => $user->id, 'role' => $user->role, 'username' => $user->username, 'avatar' => $user->avatar], 200);
             }
         }
         // Đăng nhập thất bại
@@ -73,15 +73,25 @@ class UserController extends Controller {
             return response()->json(['message' => 'Username or Email already registered'], 401);
         }
         $newUser = User::create(['username' => $username, 'password' => bcrypt($password), 'email' => $email, 'avatar' => $imagePath, 'registered_at' => Carbon::now()->format('Y-m-d H:i:s'), 'role' => 'User']);
-        $id = User::where('username', $newUser->username)->select('id')->first();
-        return response()->json(['message' => 'Registration successful', 'id' => $id->id], 200);
+        $id = User::where('username', $newUser->username)->first();
+        return response()->json(['message' => 'Registration successful', 'id' => $id->id, 'role' => $id->role, 'username' => $id->username, 'avatar' => $id->avatar], 200);
     }
 
     function UpdateUser(Request $request) {
-        $dataToKeep = $request->only(['avatar', 'username', 'email', 'role']);
+        $id = $request->input('id');
+        $dataToKeep = $request->only(['username', 'email', 'role']);
         $dataToKeep = array_filter($dataToKeep, function ($value) {
             return $value !== null && $value !== '';
         });
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar');
+            $fileName = time() . '_' . $avatarPath->getClientOriginalName();
+            $avatarPath->move(public_path('uploads/picture'), $fileName);
+            $filePath = DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'picture' . DIRECTORY_SEPARATOR . $fileName;
+            $dataToKeep['avatar'] = $filePath;
+        }
+        User::where('id', $id)->update($dataToKeep);
+        return response()->json(['message' => 'User updated successfully']);
     }
 
     function Forgot(Request $request) {
