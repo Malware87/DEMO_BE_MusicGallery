@@ -23,7 +23,7 @@ class SongController extends Controller {
             $fileName = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('uploads/audio'), $fileName);
             $publicFolder = 'uploads';
-            $filePath = DIRECTORY_SEPARATOR . $publicFolder . DIRECTORY_SEPARATOR . $fileName;
+            $filePath = DIRECTORY_SEPARATOR . $publicFolder . DIRECTORY_SEPARATOR . 'audio' . DIRECTORY_SEPARATOR . $fileName;
             // $filePath = $request->file('audio')->storeAs('uploads', time() . '_' . $request->file('audio')->getClientOriginalName(), 'public');
             Song::create(['title' => $title, 'artist' => $artist, 'genre' => $genre, 'file_path' => $filePath, 'lyrics' => $lyrics]);
             return response()->json(['message' => 'Upload successfully'], 200);
