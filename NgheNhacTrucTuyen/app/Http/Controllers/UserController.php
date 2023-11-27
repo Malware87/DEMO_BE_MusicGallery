@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class UserController extends Controller {
 //    // chưa chạy được
@@ -50,7 +51,7 @@ class UserController extends Controller {
             // Kiểm tra mật khẩu
             if (password_verify($password, $user->password)) {
                 // Đăng nhập thành công
-                return response()->json(['message' => 'Login Success', 'id' => $user->id, 'role' => $user->role, 'username' => $user->username, 'avatar' => $user->avatar], 200);
+                return response()->json(['message' => 'Login Success', 'id' => $user->id, 'role' => $user->role, 'username' => $user->username, 'avatar' => $user->avatar, 'email' => $user->email], 200);
             }
         }
         // Đăng nhập thất bại
@@ -74,7 +75,7 @@ class UserController extends Controller {
         }
         $newUser = User::create(['username' => $username, 'password' => bcrypt($password), 'email' => $email, 'avatar' => $imagePath, 'registered_at' => Carbon::now()->format('Y-m-d H:i:s'), 'role' => 'User']);
         $id = User::where('username', $newUser->username)->first();
-        return response()->json(['message' => 'Registration successful', 'id' => $id->id, 'role' => $id->role, 'username' => $id->username, 'avatar' => $id->avatar], 200);
+        return response()->json(['message' => 'Registration successful', 'id' => $id->id, 'role' => $id->role, 'username' => $id->username, 'avatar' => $id->avatar, 'email' => $id->email], 200);
     }
 
     function UpdateUser(Request $request) {
@@ -84,6 +85,7 @@ class UserController extends Controller {
             return $value !== null && $value !== '';
         });
         if ($request->hasFile('avatar')) {
+//            $oldAvatar = User::
             $avatarPath = $request->file('avatar');
             $fileName = time() . '_' . $avatarPath->getClientOriginalName();
             $avatarPath->move(public_path('uploads/picture'), $fileName);
@@ -91,6 +93,9 @@ class UserController extends Controller {
             $dataToKeep['avatar'] = $filePath;
         }
         User::where('id', $id)->update($dataToKeep);
+        if ($request->hasFile('avatar')) {
+            return response()->json(['message' => 'User updated successfully', 'avatar' => $filePath]);
+        }
         return response()->json(['message' => 'User updated successfully']);
     }
 
@@ -100,7 +105,13 @@ class UserController extends Controller {
         if ($validator->fails()) {
             return response()->json(['message' => 'Invalid email']);
         }
-        Mail::to($email)->send(new ForgotPasswordMail());
+        $user = User::where('email', $email)->first();
+        if (!$user) {
+            return response()->json(['message' => 'Email does not match'], 401);
+        }
+        $newPassword = Str::random($length = 12);
+        User::where('email', $email)->update(['password' => bcrypt($newPassword)]);
+        Mail::to($email)->send(new ForgotPasswordMail($user, $newPassword));
         return response()->json(['message' => 'Send email'], 200);
     }
 
