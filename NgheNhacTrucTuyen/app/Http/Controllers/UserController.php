@@ -67,7 +67,7 @@ class UserController extends Controller {
         $validator = Validator::make(['email' => $email], ['email' => 'required|email',]);
         $imagePath = '\uploads\picture\default.png';
         if ($validator->fails()) {
-            return response()->json(['message' => 'Invalid email']);
+            return response()->json(['message' => 'Invalid email'], 401);
         }
         $user = User::where('email', $email)->first();
         if ($user) {
@@ -76,6 +76,30 @@ class UserController extends Controller {
         $newUser = User::create(['username' => $username, 'password' => bcrypt($password), 'email' => $email, 'avatar' => $imagePath, 'registered_at' => Carbon::now()->format('Y-m-d H:i:s'), 'role' => 'User']);
         $id = User::where('username', $newUser->username)->first();
         return response()->json(['message' => 'Registration successful', 'id' => $id->id, 'role' => $id->role, 'username' => $id->username, 'avatar' => $id->avatar, 'email' => $id->email], 200);
+    }
+
+    function AddUser(Request $request) {
+        $username = $request->input('username');
+        $password = $request->input('password');
+        $email = $request->input('email');
+        $validator = Validator::make(['email' => $email], ['email' => 'required|email',]);
+        $role = $request->input('role');
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Invalid email'], 401);
+        }
+        if (User::where('email', $email)->first()) {
+            return response()->json(['message', 'Email already registered'], 401);
+        }
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar');
+            $fileName = time() . '_' . $avatarPath->getClientOriginalName();
+            $avatarPath->move(public_path('uploads/picture'), $fileName);
+            $filePath = DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'picture' . DIRECTORY_SEPARATOR . $fileName;
+            User::create(['username' => $username, 'password' => bcrypt($password), 'email' => $email, 'avatar' => $filePath, 'registered_at' => Carbon::now()->format('Y-m-d H:i:s'), 'role' => $role]);
+            return response()->json(['message' => 'Create success']);
+        }
+        User::create(['username' => $username, 'password' => bcrypt($password), 'email' => $email, 'registered_at' => Carbon::now()->format('Y-m-d H:i:s'), 'role' => $role]);
+        return response()->json(['message' => 'Create success']);
     }
 
     function UpdateUser(Request $request) {
@@ -145,6 +169,10 @@ class UserController extends Controller {
             $start = $request->input('start');
             $output = User::select('id', 'avatar', 'username', 'email', 'registered_at', 'role')->orderBy('id')->skip($start)->take(10)->get();
             return response()->json(['records' => $records, 'users' => $output]);
+        }
+        if ($request->has('id')) {
+            $id = $request->input('id');
+            return response()->json(User::where('id', $id)->select('avatar', 'username', 'email', 'role')->first());
         }
         return response()->json(User::select('id', 'avatar', 'username', 'email', 'registered_at', 'role')->get());
     }
