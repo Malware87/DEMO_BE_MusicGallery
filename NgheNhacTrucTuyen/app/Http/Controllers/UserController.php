@@ -68,9 +68,9 @@ class UserController extends Controller {
         if ($validator->fails()) {
             return response()->json(['message' => 'Invalid email']);
         }
-        $user = User::where('username', $username)->orWhere('email', $email)->first();
+        $user = User::where('email', $email)->first();
         if ($user) {
-            return response()->json(['message' => 'Username or Email already registered'], 401);
+            return response()->json(['message' => 'Email already registered'], 401);
         }
         $newUser = User::create(['username' => $username, 'password' => bcrypt($password), 'email' => $email, 'avatar' => $imagePath, 'registered_at' => Carbon::now()->format('Y-m-d H:i:s'), 'role' => 'User']);
         $id = User::where('username', $newUser->username)->first();
