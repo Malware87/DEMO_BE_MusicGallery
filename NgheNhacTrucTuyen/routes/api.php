@@ -45,3 +45,7 @@ Route::get('/user/{id}', [UserController::class, 'GetUserById']);
 
 // Genre routes
 Route::get('/genre/getgenre', [GenreController::class, 'GetGenre']);
+
+//Playlist Route
+Route::post('/playlist/newplaylist', [PlaylistController::class, 'NewPlaylist']);
+Route::post('/playlist/getplaylist', [PlaylistController::class, 'GetPlaylist']);
