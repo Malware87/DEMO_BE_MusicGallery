@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-<<<<<<< HEAD
 use App\Mail\ForgotPasswordMail;
 use App\Models\User;
 use Carbon\Carbon;
@@ -84,11 +83,4 @@ class SingerController extends Controller {
             return response()->json(['message' => 'Xóa thành công']);
         }
     }
-=======
-use Illuminate\Http\Request;
-use App\Models\Singer;
-
-class SingerController extends Controller {
-    //
->>>>>>> 3872ef26a5662cd65403d0b0de0b1d5e3e5b3e0b
 }
