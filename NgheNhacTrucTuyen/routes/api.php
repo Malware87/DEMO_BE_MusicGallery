@@ -34,13 +34,25 @@ Route::post('/user/forgot', [UserController::class, 'Forgot']);
 Route::post('/user/changepwd', [UserController::class, 'ChangePwd']);
 Route::delete('/user', [UserController::class, 'DeleteUser']);
 Route::post('/user/update', [UserController::class, 'UpdateUser']);
+Route::post('/user/adduser', [UserController::class, 'AddUser']);
 
 // Songs routes
 Route::post('/song/addsong', [SongController::class, 'AddSong']);
 Route::post('/song/search', [SongController::class, 'Search']);
 Route::post('/song/getsong', [SongController::class, 'GetSong']);
 
-Route::get('/user/{id}', [UserController::class, 'GetUserById']);
-
 // Genre routes
-Route::get('/genre/getgenre', [GenreController::class, 'GetGenre']);
+Route::get('/genre', [GenreController::class, 'GetGenre']);
+Route::post('/genre/add', [GenreController::class, 'addGenre']);
+Route::delete('/genre', [GenreController::class, 'deleteGenre']);
+Route::post('/genre/update', [GenreController::class, 'updateGenre']);
+
+//Playlist Route
+Route::post('/playlist/newplaylist', [PlaylistController::class, 'createPlaylist']);
+Route::post('/playlist/getplaylist', [PlaylistController::class, 'getAllPlaylists']);
+Route::post('/playlist/update', [PlaylistController::class, 'updatePlaylist']);
+
+//PlaylistSong Route
+Route::post('/playlist/song/get', [PlaylistSongController::class, 'GetSongFormPlaylist']);
+Route::delete('/playlist/song', [PlaylistSongController::class, 'removeSongFromPlaylist']);
+Route::post('/playlist/song/addsong', [PlaylistSongController::class, 'addSongToPlaylist']);

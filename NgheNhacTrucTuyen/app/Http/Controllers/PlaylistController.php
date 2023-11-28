@@ -7,36 +7,29 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Playlist;
 
 class PlaylistController extends Controller {
+
     // Tạo mới playlist
     public function createPlaylist(Request $request) {
-        $name = $request->input('name');
-        $description = $request->input('description');
-
-        $playlist = Playlist::create([
-            'name' => $name,
-            'description' => $description,
-        ]);
-
-        return response()->json(['message' => 'Playlist được tạo thành công', 'playlist' => $playlist], 200);
+        $data = $request->only('user_id', 'name', 'description');
+        Playlist::create($data);
+        return response()->json(['message' => 'Playlist được tạo thành công'], 201);
     }
+
     // Cập nhật playlist
-    public function updatePlaylist(Request $request, $playlistId) {
-        $name = $request->input('name');
-        $description = $request->input('description');
-
-        $playlist = Playlist::find($playlistId);
-
+    public function updatePlaylist(Request $request) {
+        $playlistID = $request->input('id');
+        $data = $request->only('name', 'description');
+        $dataToKeep = array_filter($data, function ($value) {
+            return $value !== null && $value !== '';
+        });
+        $playlist = Playlist::find($playlistID);
         if (!$playlist) {
-            return response()->json(['message' => 'Playlist không tồn tại'], 404);
+            return response()->json(['message' => 'Playlist không tồn tại'], 400);
         }
-
-        $playlist->update([
-            'name' => $name,
-            'description' => $description,
-        ]);
-
-        return response()->json(['message' => 'Playlist đã được cập nhật thành công', 'playlist' => $playlist], 200);
+        Playlist::where('id', $playlistID)->update($dataToKeep);
+        return response()->json(['message' => 'Playlist đã được cập nhật thành công'], 200);
     }
+
     // Xóa playlist
     public function deletePlaylist(Request $request, $playlistId) {
         $playlist = Playlist::find($playlistId);
@@ -47,22 +40,11 @@ class PlaylistController extends Controller {
         $playlist->delete();
         return response()->json(['message' => 'Playlist đã được xóa thành công'], 200);
     }
+
     // Lấy toàn bộ danh sách playlist
     public function getAllPlaylists(Request $request) {
-        $playlists = Playlist::select('id', 'name', 'description')->get();
-
-        return response()->json(['playlists' => $playlists], 200);
-    }
-    // Lấy các bài hát trong playlist
-    public function getSongsInPlaylist(Request $request, $playlistId) {
-        $playlist = Playlist::find($playlistId);
-
-        if (!$playlist) {
-            return response()->json(['message' => 'Playlist not found'], 404);
-        }
-
-        $songs = $playlist->songs()->select('id', 'title', 'singerID', 'genre', 'file_path', 'lyrics', 'listen_count', 'rating')->get();
-
-        return response()->json(['songs' => $songs], 200);
+        $id = $request->input('user_id');
+        $playlists = Playlist::where('user_id', $id)->select('id', 'name', 'description')->get();
+        return response()->json($playlists);
     }
 }
