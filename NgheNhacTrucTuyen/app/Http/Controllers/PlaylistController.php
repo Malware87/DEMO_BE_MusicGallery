@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Playlist;
 
 class PlaylistController extends Controller {
+
     // Tạo mới playlist
     public function createPlaylist(Request $request) {
         $name = $request->input('name');
