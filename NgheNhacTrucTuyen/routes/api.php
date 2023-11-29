@@ -51,6 +51,7 @@ Route::post('/genre/update', [GenreController::class, 'updateGenre']);
 Route::post('/playlist/newplaylist', [PlaylistController::class, 'createPlaylist']);
 Route::post('/playlist/getplaylist', [PlaylistController::class, 'getAllPlaylists']);
 Route::post('/playlist/update', [PlaylistController::class, 'updatePlaylist']);
+Route::delete('/playlist', [PlaylistController::class, 'deletePlaylist']);
 
 //PlaylistSong Route
 Route::post('/playlist/song/get', [PlaylistSongController::class, 'GetSongFormPlaylist']);
