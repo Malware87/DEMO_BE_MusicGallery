@@ -54,12 +54,15 @@ class SongController extends Controller {
         return response()->json($searchResult);
     }
 
-    public function GetTop10Songs(Request $request) {
-        $topSongs = Song::select('id','title', 'artist', 'genre', 'file_path', 'listen_count', 'rating')
-            ->orderBy('listen_count', 'desc')
-            ->take(10)
-            ->get();
 
+    public function GetSongFromPlaylist(Request $request) {
+        $playlist_id = $request->input('playlist_id');
+        $songsInPlaylist = Song::select('songs.id', 'songs.title as song_name', 'singers.name as singer_name')->join('playlist_songs', 'songs.id', '=', 'playlist_songs.song_id')->join('singers', 'songs.singerID', '=', 'singers.id')->where('playlist_songs.playlist_id', $playlist_id)->get();
+        return response()->json($songsInPlaylist);
+    }
+
+    public function GetTop10Songs(Request $request) {
+        $topSongs = Song::select('id', 'title', 'artist', 'genre', 'file_path', 'listen_count', 'rating')->orderBy('listen_count', 'desc')->take(10)->get();
         return response()->json($topSongs);
     }
 }
