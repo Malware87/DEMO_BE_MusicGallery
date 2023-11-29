@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Singer extends Model
 {
     use HasFactory;
-    protected $fillable = ['urlAvatar', 'name', 'email', 'singerDescription'];
+    protected $fillable = ['urlAvatar', 'name', 'singerDescription'];
 
 }
