@@ -47,4 +47,8 @@ class PlaylistController extends Controller {
         $playlists = Playlist::where('user_id', $id)->select('id', 'name', 'description')->get();
         return response()->json($playlists);
     }
+
+    public function GetPlaylistByID(Request $request) {
+        return response()->json(Playlist::where('id', $request->input('id'))->select('id', 'name', 'description')->first());
+    }
 }
