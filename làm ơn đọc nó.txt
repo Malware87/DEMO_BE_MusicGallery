@@ -1,17 +1,11 @@
 1. vào xampp -> tạo sql có tên :"nghenhactructuyen"
-2. vào NgheNhacTrucTuyen mở file ".env" để sửa username hoặc password nếu cần
+2. vào NgheNhacTrucTuyen mở file ".env" để sửa username hoặc password nếu cần tốt nhất nên copy từ "".env root" qua
 3. quay lại đây mở terminal chỏ vào folder NgheNhacTrucTuyen vào run dòng lệnh sau :
-	composer install
-	php artisan migrate
-Models nằm ở app/Models - định nghĩa xong 
-Controller nằm ở app/Http/Controller - mới tạo chưa làm cc gì
-
-
-Chạy chương trình :
+	PS ....\DEMO_BE_MusicGallery\NgheNhacTrucTuyen> composer install
+	PS ....\DEMO_BE_MusicGallery\NgheNhacTrucTuyen> php artisan migrate
+4. Chạy chương trình :
 khởi động terminal
-PS ....\DEMO_BE_MusicGallery> cd NgheNhacTrucTuyen
-PS ....\DEMO_BE_MusicGallery\NgheNhacTrucTuyen> php artisan serve
+    PS ....\DEMO_BE_MusicGallery> cd NgheNhacTrucTuyen
+    PS ....\DEMO_BE_MusicGallery\NgheNhacTrucTuyen> php artisan serve
 
-1 số lệnh thêm :
-    composer install
 
