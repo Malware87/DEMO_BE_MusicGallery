@@ -15,13 +15,11 @@ class GenreController extends Controller {
     // Tạo Genre
     public function addGenre(Request $request) {
         $name = $request->input('name');
-
         // Kiểm tra xem thể loại đã tồn tại chưa
         $existingGenre = Genre::where('name', $name)->first();
         if ($existingGenre) {
             return response()->json(['message' => 'Thể loại đã tồn tại'], 409);
         }
-
         // Thêm thể loại mới
         Genre::create(['name' => $name]);
         return response()->json(['message' => 'Thể loại đã được thêm mới thành công'], 201);

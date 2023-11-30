@@ -60,7 +60,10 @@ class SongController extends Controller {
             ->take(10)
             ->get();
 
-        return response()->json($topSongs);
+    public function GetSongFromPlaylist(Request $request) {
+        $playlist_id = $request->input('playlist_id');
+        $songsInPlaylist = Song::select('songs.id', 'songs.title as song_name', 'singers.name as singer_name')->join('playlist_songs', 'songs.id', '=', 'playlist_songs.song_id')->join('singers', 'songs.singerID', '=', 'singers.id')->where('playlist_songs.playlist_id', $playlist_id)->get();
+        return response()->json(['list' => $songsInPlaylist, 'count' => $songsInPlaylist->count()]);
     }
 
 
