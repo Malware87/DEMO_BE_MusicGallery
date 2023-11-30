@@ -10,4 +10,10 @@ class Singer extends Model
     use HasFactory;
     protected $fillable = ['urlAvatar', 'name', 'singerDescription'];
 
+    // Singer.php (Model)
+    public function songs()
+    {
+        return $this->hasMany(Song::class, 'singerID');
+    }
+
 }
