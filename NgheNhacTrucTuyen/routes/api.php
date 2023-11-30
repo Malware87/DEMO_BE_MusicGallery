@@ -43,6 +43,7 @@ Route::post('/song/search', [SongController::class, 'Search']);
 Route::post('/song/getsong', [SongController::class, 'GetSong']);
 Route::post('/song/gettopsong', [SongController::class, 'GetTopSongs']);
 Route::post('/song/searchbysinger', [SongController::class, 'searchSongsBySinger']);
+Route::post('/song/playlist/get', [SongController::class, 'GetSongFromPlaylist']);
 
 // Genre routes
 Route::get('/genre', [GenreController::class, 'GetGenre']);
@@ -54,6 +55,7 @@ Route::post('/genre/update', [GenreController::class, 'updateGenre']);
 Route::post('/playlist/newplaylist', [PlaylistController::class, 'createPlaylist']);
 Route::post('/playlist/getplaylist', [PlaylistController::class, 'getAllPlaylists']);
 Route::post('/playlist/update', [PlaylistController::class, 'updatePlaylist']);
+ROute::post('/playlist/get', [PlaylistController::class, 'GetPlaylistByID']);
 
 //PlaylistSong Route
 Route::post('/playlist/song/get', [SongController::class, 'GetSongFromPlaylist']);
