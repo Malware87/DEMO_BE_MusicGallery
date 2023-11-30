@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Genre extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'description'];
 
     // Định nghĩa mối quan hệ giữa Genre và Songs
     public function songs()
