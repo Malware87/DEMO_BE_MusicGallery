@@ -6,6 +6,7 @@ use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Song;
+use App\Models\Singer;
 use Illuminate\Support\Str;
 
 class SongController extends Controller {
@@ -25,7 +26,7 @@ class SongController extends Controller {
             $publicFolder = 'uploads';
             $filePath = DIRECTORY_SEPARATOR . $publicFolder . DIRECTORY_SEPARATOR . 'audio' . DIRECTORY_SEPARATOR . $fileName;
             // $filePath = $request->file('audio')->storeAs('uploads', time() . '_' . $request->file('audio')->getClientOriginalName(), 'public');
-            Song::create(['title' => $title, 'artist' => $artist, 'genre' => $genre, 'file_path' => $filePath, 'lyrics' => $lyrics]);
+            Song::create(['title' => $title, 'singerID' => $artist, 'genre' => $genre, 'file_path' => $filePath, 'lyrics' => $lyrics]);
             return response()->json(['message' => 'Upload successfully'], 200);
         }
     }
@@ -45,6 +46,12 @@ class SongController extends Controller {
             $entry = $request->input('genre');
             $searchResult = Song::where('genre', 'LIKE', '%' . $entry . '%')->select('id', 'title', 'artist', 'genre', 'listen_count', 'rating')->get();
             return response()->json($searchResult);
+        }
+        if ($request->has('start')) {
+            $entry = $request->input('start');
+            $records = Song::count();
+            $searchResult = Song::select('songs.id', 'songs.title as song_name', 'singers.name as singer_name', 'songs.genre', 'songs.listen_count')->join('singers', 'songs.singerID', '=', 'singers.id')->orderBy('songs.id')->skip($entry)->take(10)->get();
+            return response()->json(['record' => $records, 'songs' => $searchResult]);
         }
     }
 
@@ -69,18 +76,14 @@ class SongController extends Controller {
 
     public function searchSongsBySinger(Request $request) {
         $singerID = $request->input('singerID');
-
         // Kiểm tra xem ca sĩ có tồn tại hay không
         $singer = Singer::find($singerID);
-
         if (!$singer) {
             return response()->json(['message' => 'Ca sĩ không tồn tại'], 404);
         }
-
         // Lấy danh sách các bài hát của ca sĩ
         $songs = $singer->songs;
-
-        return response()->json(['songs' => $songs]);
+        return response()->json($songs);
     }
 }
 

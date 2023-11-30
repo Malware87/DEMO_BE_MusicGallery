@@ -9,6 +9,7 @@ use App\Http\Controllers\GenreController;
 use App\Http\Controllers\PlaylistController;
 use App\Http\Controllers\PlaylistSongController;
 use App\Http\Controllers\RankingController;
+use App\Http\Controllers\SingerController;
 
 
 /*
@@ -40,11 +41,12 @@ Route::post('/user/adduser', [UserController::class, 'AddUser']);
 Route::post('/song/addsong', [SongController::class, 'AddSong']);
 Route::post('/song/search', [SongController::class, 'Search']);
 Route::post('/song/getsong', [SongController::class, 'GetSong']);
+Route::post('/song/gettopsong', [SongController::class, 'GetTopSongs']);
+Route::post('/song/searchbysinger', [SongController::class, 'searchSongsBySinger']);
 Route::post('/song/playlist/get', [SongController::class, 'GetSongFromPlaylist']);
 
-
 // Genre routes
-Route::post('/genre', [GenreController::class, 'GetGenre']);
+Route::get('/genre', [GenreController::class, 'GetGenre']);
 Route::post('/genre/add', [GenreController::class, 'addGenre']);
 Route::delete('/genre', [GenreController::class, 'deleteGenre']);
 Route::post('/genre/update', [GenreController::class, 'updateGenre']);
@@ -52,10 +54,13 @@ Route::post('/genre/update', [GenreController::class, 'updateGenre']);
 //Playlist Route
 Route::post('/playlist/newplaylist', [PlaylistController::class, 'createPlaylist']);
 Route::post('/playlist/getplaylist', [PlaylistController::class, 'getAllPlaylists']);
-Route::post('/playlist/get', [PlaylistController::class, 'GetPlaylistByID']);
 Route::post('/playlist/update', [PlaylistController::class, 'updatePlaylist']);
-Route::delete('/playlist', [PlaylistController::class, 'deletePlaylist']);
+ROute::post('/playlist/get', [PlaylistController::class, 'GetPlaylistByID']);
 
 //PlaylistSong Route
+Route::post('/playlist/song/get', [SongController::class, 'GetSongFromPlaylist']);
 Route::delete('/playlist/song', [PlaylistSongController::class, 'removeSongFromPlaylist']);
 Route::post('/playlist/song/addsong', [PlaylistSongController::class, 'addSongToPlaylist']);
+
+//Singer Route
+Route::post('/singer/add', [SingerController::class, 'AddSinger']);
