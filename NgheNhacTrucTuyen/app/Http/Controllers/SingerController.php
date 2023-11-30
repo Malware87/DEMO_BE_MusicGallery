@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ForgotPasswordMail;
+use App\Models\Genre;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Migrations\ResetCommand;
@@ -14,8 +15,10 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
-class SingerController extends Controller {
-    function AddSinger(Request $request) {
+class SingerController extends Controller
+{
+    function AddSinger(Request $request)
+    {
         $name = $request->input('name');
         $singerDescription = $request->input('singerDescription');
         if ($request->hasFile('urlAvatar')) {
@@ -30,7 +33,8 @@ class SingerController extends Controller {
         return response()->json(['message' => 'Create success']);
     }
 
-    public function GetSinger(Request $request) {
+    public function GetSinger(Request $request)
+    {
         if ($request->has('start')) {
             $records = Singer::count();
             $start = $request->input('start');
@@ -44,7 +48,8 @@ class SingerController extends Controller {
         return response()->json(Singer::select('id', 'urlAvatar', 'name', 'singerDescription')->get());
     }
 
-    public function GetSingerById(Request $request, $id) {
+    public function GetSingerById(Request $request, $id)
+    {
         // Tìm người dùng theo ID
         $singer = Singer::find($id);
 
@@ -54,7 +59,9 @@ class SingerController extends Controller {
         // Trả về thông tin chi tiết của người dùng
         return response()->json(['Singer' => $singer], 200);
     }
-    function UpdateSinger(Request $request) {
+
+    function UpdateSinger(Request $request)
+    {
         $id = $request->input('id');
         $dataToKeep = $request->only(['name', 'singerDescription']);
         $dataToKeep = array_filter($dataToKeep, function ($value) {
@@ -74,13 +81,27 @@ class SingerController extends Controller {
         return response()->json(['message' => 'Singer updated successfully']);
     }
 
-    public function DeleteSinger(Request $request) {
-        $id = $request->input('id');
-        Singer::where('id', $id)->delete();
-        if (Singer::where('id', $id)->exists()) {
+    public function DeleteSinger(Request $request)
+    {
+        $singerID = $request->input('id');
+
+        // Tìm người ca sĩ theo ID
+        $singer = Singer::find($singerID);
+
+        // Kiểm tra xem người ca sĩ có tồn tại hay không
+        if (!$singer){
+            return response()->json(['message' => 'Singer không tồn tại'], 404);
+        }
+
+        // Xóa người ca sĩ
+        $singer->delete();
+        // Kiểm tra xem người ca sĩ đã được xóa thành công hay không
+        if (Singer::where('id', $singerID)->exists()) {
             return response()->json(['message' => 'Xóa thất bại'], 500);
         } else {
             return response()->json(['message' => 'Xóa thành công']);
         }
     }
+
 }
+
