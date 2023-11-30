@@ -8,7 +8,6 @@ use App\Http\Controllers\SongController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\PlaylistController;
 use App\Http\Controllers\PlaylistSongController;
-use App\Http\Controllers\SingerController;
 use App\Http\Controllers\RankingController;
 
 
@@ -59,10 +58,3 @@ Route::post('/playlist/update', [PlaylistController::class, 'updatePlaylist']);
 Route::post('/playlist/song/get', [PlaylistSongController::class, 'GetSongFormPlaylist']);
 Route::delete('/playlist/song', [PlaylistSongController::class, 'removeSongFromPlaylist']);
 Route::post('/playlist/song/addsong', [PlaylistSongController::class, 'addSongToPlaylist']);
-
-
-//Singer Route
-Route::post('/singer/getsinger', [SingerController::class, 'GetSinger']);
-Route::post('/singer/add', [SingerController::class, 'AddSinger']);
-Route::delete('/singer', [SingerController::class, 'DeleteSinger']);
-Route::post('/singer/update', [SingerController::class, 'UpdateSinger']);

@@ -31,13 +31,13 @@ class PlaylistController extends Controller {
     }
 
     // Xóa playlist
-    public function deletePlaylist(Request $request, $playlistId) {
-        $playlist = Playlist::find($playlistId);
-
+    public function deletePlaylist(Request $request) {
+        $playlistID = $request->input('id');
+        $playlist = Playlist::find($playlistID);
         if (!$playlist) {
             return response()->json(['message' => 'Playlist không tồn tại'], 404);
         }
-        $playlist->delete();
+        Playlist::where('id', $playlistID)->delete();
         return response()->json(['message' => 'Playlist đã được xóa thành công'], 200);
     }
 
@@ -46,5 +46,9 @@ class PlaylistController extends Controller {
         $id = $request->input('user_id');
         $playlists = Playlist::where('user_id', $id)->select('id', 'name', 'description')->get();
         return response()->json($playlists);
+    }
+
+    public function GetPlaylistByID(Request $request) {
+        return response()->json(Playlist::where('id', $request->input('id'))->select('id', 'name', 'description')->first());
     }
 }

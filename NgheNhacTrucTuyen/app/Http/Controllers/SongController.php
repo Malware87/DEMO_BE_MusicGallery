@@ -16,7 +16,7 @@ class SongController extends Controller {
             if ($song) {
                 return response()->json(['message' => 'Song already uploaded'], 401);
             }
-            $singerID = ucwords(Str::lower($request->input('singerID')));
+            $artist = ucwords(Str::lower($request->input('artist')));
             $genre = $request->input('genre');
             $lyrics = $request->input('lyrics');
             $file = $request->file('audio');
@@ -25,7 +25,7 @@ class SongController extends Controller {
             $publicFolder = 'uploads';
             $filePath = DIRECTORY_SEPARATOR . $publicFolder . DIRECTORY_SEPARATOR . 'audio' . DIRECTORY_SEPARATOR . $fileName;
             // $filePath = $request->file('audio')->storeAs('uploads', time() . '_' . $request->file('audio')->getClientOriginalName(), 'public');
-            Song::create(['title' => $title, 'singerID' => $singerID, 'genre' => $genre, 'file_path' => $filePath, 'lyrics' => $lyrics]);
+            Song::create(['title' => $title, 'artist' => $artist, 'genre' => $genre, 'file_path' => $filePath, 'lyrics' => $lyrics]);
             return response()->json(['message' => 'Upload successfully'], 200);
         }
     }
@@ -33,36 +33,36 @@ class SongController extends Controller {
     public function Search(Request $request) {
         if ($request->has('title')) {
             $entry = $request->input('title');
-            $searchResult = Song::where('title', 'LIKE', '%' . $entry . '%')->select('id', 'title', 'singerID', 'genre', 'listen_count', 'rating')->get();
+            $searchResult = Song::where('title', 'LIKE', '%' . $entry . '%')->select('id', 'title', 'artist', 'genre', 'listen_count', 'rating')->get();
             return response()->json($searchResult);
         }
-        if ($request->has('singerID')) {
-            $entry = $request->input('singerID');
-            $searchResult = Song::where('singerID', 'LIKE', '%' . $entry . '%')->select('id', 'title', 'singerID', 'genre', 'listen_count', 'rating')->get();
+        if ($request->has('artist')) {
+            $entry = $request->input('artist');
+            $searchResult = Song::where('artist', 'LIKE', '%' . $entry . '%')->select('id', 'title', 'artist', 'genre', 'listen_count', 'rating')->get();
             return response()->json($searchResult);
         }
         if ($request->has('genre')) {
             $entry = $request->input('genre');
-            $searchResult = Song::where('genre', 'LIKE', '%' . $entry . '%')->select('id', 'title', 'singerID', 'genre', 'listen_count', 'rating')->get();
+            $searchResult = Song::where('genre', 'LIKE', '%' . $entry . '%')->select('id', 'title', 'artist', 'genre', 'listen_count', 'rating')->get();
             return response()->json($searchResult);
         }
     }
 
     public function GetSong(Request $request) {
         $entry = $request->input('id');
-        $searchResult = Song::where('id', $entry)->select('title', 'singerID', 'genre', 'file_path', 'listen_count', 'rating')->first();
+        $searchResult = Song::where('id', $entry)->select('title', 'artist', 'genre', 'file_path', 'listen_count', 'rating')->first();
         return response()->json($searchResult);
     }
 
-    public function GetTopSongs(Request $request) {
-        $many = $request->input('many');
-        $topSongs = Song::select('id','title', 'singerID', 'genre', 'file_path', 'listen_count', 'rating')
+    public function GetTop10Songs(Request $request) {
+        $topSongs = Song::select('id','title', 'artist', 'genre', 'file_path', 'listen_count', 'rating')
             ->orderBy('listen_count', 'desc')
-            ->take($many)
+            ->take(10)
             ->get();
 
         return response()->json($topSongs);
     }
+
 
     public function searchSongsBySinger(Request $request)
     {
@@ -80,4 +80,5 @@ class SongController extends Controller {
 
         return response()->json(['songs' => $songs]);
     }
+}
 }

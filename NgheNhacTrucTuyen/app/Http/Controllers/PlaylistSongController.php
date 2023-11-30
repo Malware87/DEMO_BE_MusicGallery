@@ -41,12 +41,13 @@ class PlaylistSongController extends Controller {
         return response()->json(['message' => 'Song deleted from playlist'], 200);
     }
 
-    public function GetSongFormPlaylist(Request $request) {
+    public function GetSongFromPlaylist(Request $request) {
         $id = $request->input('playlist_id');
-        $playlist = PlaylistSong::where('playlist_id', $id)->select('song_id', 'order')->get();
+        $playlist = PlaylistSong::where('playlist_id', $id)->select('song_id')->get();
         if (!$playlist) {
             return response()->json(['message' => 'Playlist not found'], 404);
         }
+
         return response()->json($playlist);
     }
 }
