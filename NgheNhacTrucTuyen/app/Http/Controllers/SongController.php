@@ -55,10 +55,8 @@ class SongController extends Controller {
     }
 
     public function GetTop10Songs(Request $request) {
-        $topSongs = Song::select('id','title', 'artist', 'genre', 'file_path', 'listen_count', 'rating')
-            ->orderBy('listen_count', 'desc')
-            ->take(10)
-            ->get();
+        $topSongs = Song::select('id', 'title', 'artist', 'genre', 'file_path', 'listen_count', 'rating')->orderBy('listen_count', 'desc')->take(10)->get();
+    }
 
     public function GetSongFromPlaylist(Request $request) {
         $playlist_id = $request->input('playlist_id');
@@ -67,8 +65,7 @@ class SongController extends Controller {
     }
 
 
-    public function searchSongsBySinger(Request $request)
-    {
+    public function searchSongsBySinger(Request $request) {
         $singerID = $request->input('singerID');
 
         // Kiểm tra xem ca sĩ có tồn tại hay không
@@ -84,4 +81,4 @@ class SongController extends Controller {
         return response()->json(['songs' => $songs]);
     }
 }
-}
+
