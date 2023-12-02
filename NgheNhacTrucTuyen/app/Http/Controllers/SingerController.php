@@ -36,7 +36,7 @@ class SingerController extends Controller {
             $records = Singer::count();
             $start = $request->input('start');
             $output = Singer::select('id', 'urlAvatar', 'name', 'singerDescription')->orderBy('id')->skip($start)->take(10)->get();
-            return response()->json(['records' => $records, 'users' => $output]);
+            return response()->json(['records' => $records, 'singer' => $output]);
         }
         if ($request->has('id')) {
             $id = $request->input('id');
