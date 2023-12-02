@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Song;
 use App\Models\Singer;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 class SongController extends Controller {
     public function AddSong(Request $request) {
@@ -57,7 +58,8 @@ class SongController extends Controller {
 
     public function GetSong(Request $request) {
         $entry = $request->input('id');
-        $searchResult = Song::where('id', $entry)->select('title', 'artist', 'genre', 'file_path', 'listen_count', 'rating')->first();
+        $searchResult = Song::where('songs.id', $entry)->select('title', 'singers.name as artist', 'genre', 'file_path', 'listen_count', 'rating')->join('singers', 'songs.singerID', '=', 'singers.id')->first();
+        Song::where('id', $entry)->update(['listen_count' => $searchResult->listen_count + 1]);
         return response()->json($searchResult);
     }
 
@@ -90,9 +92,11 @@ class SongController extends Controller {
         $id = $request->input('id');
         $song = Song::find($id);
         if ($song) {
-            return response()->json(['message', 'cook well']);
+            File::delete($song->file_path);
+            Song::where('id', $id)->delete();
+            return response()->json(['message' => 'cook well']);
         } else {
-            return response()->json(['message', 'can not cook'], 401);
+            return response()->json(['message' => 'can not cook'], 401);
         }
     }
 }
