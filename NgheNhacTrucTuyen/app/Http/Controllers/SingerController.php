@@ -45,16 +45,6 @@ class SingerController extends Controller {
         return response()->json(Singer::select('id', 'urlAvatar', 'name', 'singerDescription')->get());
     }
 
-    public function GetSingerById(Request $request, $id) {
-        // Tìm người dùng theo ID
-        $singer = Singer::find($id);
-
-        if (!$singer) {
-            return response()->json(['message' => 'Singer not found'], 404);
-        }
-        // Trả về thông tin chi tiết của người dùng
-        return response()->json(['Singer' => $singer], 200);
-    }
 
     function UpdateSinger(Request $request) {
         $id = $request->input('id');
@@ -95,6 +85,43 @@ class SingerController extends Controller {
             return response()->json(['message' => 'Xóa thành công']);
         }
     }
+    public function getSingerBySong(Request $request) {
+        $songID = $request->input('songID');
+        // Tìm bài hát theo ID
+        $song = Song::find($songID);
 
+        // Kiểm tra xem bài hát có tồn tại hay không
+        if (!$song) {
+            return response()->json(['message' => 'Bài hát không tồn tại'], 404);
+        }
+        // Lấy thông tin ca sĩ của bài hát
+        $singer = $song->singer;
+        // Kiểm tra xem ca sĩ đã được lấy hay không
+        if (!$singer) {
+            return response()->json(['message' => 'Không tìm thấy ca sĩ của bài hát'], 404);
+        }
+        // Trả về thông tin ca sĩ của bài hát
+        return response()->json($singer);
+    }
+
+    public function getTotalListenCount(Request $request)
+    {
+        // Lấy id của ca sĩ từ request
+        $singerId = $request->input('id');
+        // Kiểm tra xem id có tồn tại không
+        if (!$singerId) {
+            return response()->json(['error' => 'Singer ID is required'], 400);
+        }
+        // Tìm ca sĩ theo id
+        $singer = Singer::find($singerId);
+        // Kiểm tra xem ca sĩ có tồn tại không
+        if (!$singer) {
+            return response()->json(['error' => 'Singer not found'], 404);
+        }
+        // Lấy tổng listen_count của ca sĩ
+        $totalListenCount = $singer->getTotalListenCount();
+        // Trả về kết quả dưới dạng JSON
+        return response()->json(['total_listen_count' => $totalListenCount]);
+    }
 }
 

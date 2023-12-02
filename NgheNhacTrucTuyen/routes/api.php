@@ -69,3 +69,6 @@ Route::post('/singerAdd', [SingerController::class, 'AddSinger']);
 Route::post('/singer', [SingerController::class, 'GetSinger']);
 Route::post('/singerUpdate', [SingerController::class, 'UpdateSinger']);
 Route::delete('/singer', [SingerController::class, 'DeleteSinger']);
+Route::post('/getsingerbysong', [SingerController::class, 'getSingerBySong']);
+Route::post('/getTotalListenCount', [SingerController::class, 'getTotalListenCount']);
+

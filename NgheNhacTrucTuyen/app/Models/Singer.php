@@ -15,5 +15,9 @@ class Singer extends Model
     {
         return $this->hasMany(Song::class, 'singerID');
     }
-
+    public function getTotalListenCount()
+    {
+        // Sử dụng eloquent để lấy tổng listen_count của tất cả bài hát của ca sĩ
+        return $this->songs()->sum('listen_count');
+    }
 }
