@@ -47,7 +47,6 @@ class PlaylistSongController extends Controller {
         if (!$playlist) {
             return response()->json(['message' => 'Playlist not found'], 404);
         }
-
         return response()->json($playlist);
     }
 }

@@ -83,5 +83,15 @@ class SongController extends Controller {
         $songs = $singer->songs;
         return response()->json($songs);
     }
+
+    public function DeleteSong(Request $request) {
+        $id = $request->input('id');
+        $song = Song::find($id);
+        if ($song) {
+            return response()->json(['message', 'cook well']);
+        } else {
+            return response()->json(['message', 'can not cook'], 401);
+        }
+    }
 }
 
