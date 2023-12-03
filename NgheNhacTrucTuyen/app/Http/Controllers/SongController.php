@@ -65,9 +65,7 @@ class SongController extends Controller {
     }
 
     public function OnlyGetInfo() {
-        $output = Song::select('songs.id', 'songs.title', 'singers.name as artist', 'singers.urlAvatar as urlPic', 'songs.genre')
-            ->join('singers', 'songs.singerID', '=', 'singers.id')
-            ->get();
+        $output = Song::select('songs.id', 'songs.title', 'singers.name as artist', 'singers.urlAvatar as urlPic', 'songs.genre')->join('singers', 'songs.singerID', '=', 'singers.id')->get();
 
         return response()->json($output);
     }
@@ -76,11 +74,7 @@ class SongController extends Controller {
     public function GetTopSongs(Request $request) {
         $many = $request->input('many');
 
-        $topSongs = Song::select('songs.id', 'title', 'singers.name as artist', 'listen_count', )
-            ->join('singers', 'songs.singerID', '=', 'singers.id')
-            ->orderBy('listen_count', 'desc')
-            ->take($many)
-            ->get();
+        $topSongs = Song::select('songs.id', 'title', 'singers.name as artist', 'listen_count',)->join('singers', 'songs.singerID', '=', 'singers.id')->orderBy('listen_count', 'desc')->take($many)->get();
 
         return response()->json($topSongs);
     }
@@ -118,9 +112,9 @@ class SongController extends Controller {
 
     public function SearchBar(Request $request) {
         $entry = $request->input('entry');
-        $song = Song::where('title', 'LIKE', '%' . $entry . '%')->get();
+        $song = Song::select('songs.id', 'title', 'singers.name as artist', 'listen_count',)->join('singers', 'songs.singerID', '=', 'singers.id')->where('title', 'LIKE', '%' . $entry . '%')->get();
         $artist = Singer::where('name', 'LIKE', '%' . $entry . '%')->get();
-        return response()->json(['song' => $song, 'artist' => $artist]);
+        return response()->json(['songs' => $song, 'artists' => $artist, 'count' => $song->count() + $artist->count()]);
     }
 }
 
