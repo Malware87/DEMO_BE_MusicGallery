@@ -27,6 +27,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+Route::post('/search', [SongController::class, 'SearchBar']);
 // User routes
 Route::post('/user/getuser', [UserController::class, 'GetUser']);
 Route::post('/login', [UserController::class, 'Login']);
@@ -60,7 +62,7 @@ ROute::post('/playlist/get', [PlaylistController::class, 'GetPlaylistByID']);
 ROute::delete('/playlist', [PlaylistController::class, 'deletePlaylist']);
 
 //PlaylistSong Route
-Route::post('/playlist/song/get', [SongController::class, 'GetSongFromPlaylist']);
+//Route::post('/playlist/song/get', [SongController::class, 'GetSongFromPlaylist']);
 Route::delete('/playlist/song', [PlaylistSongController::class, 'removeSongFromPlaylist']);
 Route::post('/playlist/song/addsong', [PlaylistSongController::class, 'addSongToPlaylist']);
 

@@ -35,17 +35,17 @@ class SongController extends Controller {
     public function Search(Request $request) {
         if ($request->has('title')) {
             $entry = $request->input('title');
-            $searchResult = Song::where('title', 'LIKE', '%' . $entry . '%')->select('id', 'title', 'artist', 'genre', 'listen_count', 'rating')->get();
+            $searchResult = Song::where('title', 'LIKE', '%' . $entry . '%')->select('id', 'title', 'singerID', 'genre', 'listen_count', 'rating')->get();
             return response()->json($searchResult);
         }
         if ($request->has('artist')) {
             $entry = $request->input('artist');
-            $searchResult = Song::where('artist', 'LIKE', '%' . $entry . '%')->select('id', 'title', 'artist', 'genre', 'listen_count', 'rating')->get();
+            $searchResult = Song::where('singerID', 'LIKE', '%' . $entry . '%')->select('id', 'title', 'singerID', 'genre', 'listen_count', 'rating')->get();
             return response()->json($searchResult);
         }
         if ($request->has('genre')) {
             $entry = $request->input('genre');
-            $searchResult = Song::where('genre', 'LIKE', '%' . $entry . '%')->select('id', 'title', 'artist', 'genre', 'listen_count', 'rating')->get();
+            $searchResult = Song::where('genre', 'LIKE', '%' . $entry . '%')->select('id', 'title', 'singerID', 'genre', 'listen_count', 'rating')->get();
             return response()->json($searchResult);
         }
         if ($request->has('start')) {
@@ -58,14 +58,14 @@ class SongController extends Controller {
 
     public function GetSong(Request $request) {
         $entry = $request->input('id');
-        $searchResult = Song::where('songs.id', $entry)->select('title', 'singers.name as artist','singerID', 'genre', 'file_path','lyrics', 'listen_count', 'rating')->join('singers', 'songs.singerID', '=', 'singers.id')->first();
+        $searchResult = Song::where('songs.id', $entry)->select('title', 'singers.name as artist', 'singerID', 'genre', 'file_path', 'lyrics', 'listen_count', 'rating')->join('singers', 'songs.singerID', '=', 'singers.id')->first();
         Song::where('id', $entry)->update(['listen_count' => $searchResult->listen_count + 1]);
         return response()->json($searchResult);
     }
 
     public function GetTopSongs(Request $request) {
         $many = $request->input('many');
-        $topSongs = Song::select('id', 'title', 'artist', 'genre', 'file_path', 'listen_count', 'rating')->orderBy('listen_count', 'desc')->take($many)->get();
+        $topSongs = Song::select('songs.id', 'songs.title as song_name', 'singerID', 'singers.name as singer_name', 'songs.genre', 'songs.listen_count', 'file_path')->join('singers', 'songs.singerID', '=', 'singers.id')->orderBy('listen_count', 'desc')->take($many)->get();
         return response()->json($topSongs);
     }
 
@@ -98,6 +98,13 @@ class SongController extends Controller {
         } else {
             return response()->json(['message' => 'can not cook'], 401);
         }
+    }
+
+    public function SearchBar(Request $request) {
+        $entry = $request->input('entry');
+        $song = Song::where('title', 'LIKE', '%' . $entry . '%')->get();
+        $artist = Singer::where('name', 'LIKE', '%' . $entry . '%')->get();
+        return response()->json(['song' => $song, 'artist' => $artist]);
     }
 }
 
