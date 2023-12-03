@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Genre;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -63,9 +64,24 @@ class SongController extends Controller {
         return response()->json($searchResult);
     }
 
+    public function OnlyGetInfo() {
+        $output = Song::select('songs.id', 'songs.title', 'singers.name as artist', 'singers.urlAvatar as urlPic', 'songs.genre')
+            ->join('singers', 'songs.singerID', '=', 'singers.id')
+            ->get();
+
+        return response()->json($output);
+    }
+
+
     public function GetTopSongs(Request $request) {
         $many = $request->input('many');
-        $topSongs = Song::select('songs.id', 'songs.title as song_name', 'singerID', 'singers.name as singer_name', 'songs.genre', 'songs.listen_count', 'file_path')->join('singers', 'songs.singerID', '=', 'singers.id')->orderBy('listen_count', 'desc')->take($many)->get();
+
+        $topSongs = Song::select('songs.id', 'title', 'singers.name as artist', 'listen_count', )
+            ->join('singers', 'songs.singerID', '=', 'singers.id')
+            ->orderBy('listen_count', 'desc')
+            ->take($many)
+            ->get();
+
         return response()->json($topSongs);
     }
 

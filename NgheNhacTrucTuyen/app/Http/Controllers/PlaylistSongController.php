@@ -10,7 +10,20 @@ class PlaylistSongController extends Controller {
     //Thêm bài hát vào danh sách phát
     public function addSongToPlaylist(Request $request) {
         $data = $request->only('playlist_id', 'song_id');
+
+        // Kiểm tra xem bài hát đã tồn tại trong playlist hay chưa
+        $existingEntry = PlaylistSong::where('playlist_id', $data['playlist_id'])
+            ->where('song_id', $data['song_id'])
+            ->first();
+
+        // Nếu bài hát đã tồn tại, không thêm vào nữa
+        if ($existingEntry) {
+            return response()->json(['message' => 'Bài hát đã tồn tại trong danh sách phát'], 400);
+        }
+
+        // Thêm bài hát vào playlist
         PlaylistSong::create($data);
+
         return response()->json(['message' => 'Bài hát đã được thêm vào danh sách phát'], 200);
     }
 
