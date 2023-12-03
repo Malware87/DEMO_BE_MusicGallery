@@ -58,7 +58,7 @@ class SongController extends Controller {
 
     public function GetSong(Request $request) {
         $entry = $request->input('id');
-        $searchResult = Song::where('songs.id', $entry)->select('title', 'singers.name as artist', 'genre', 'file_path', 'listen_count', 'rating')->join('singers', 'songs.singerID', '=', 'singers.id')->first();
+        $searchResult = Song::where('songs.id', $entry)->select('title', 'singers.name as artist','singerID', 'genre', 'file_path','lyrics', 'listen_count', 'rating')->join('singers', 'songs.singerID', '=', 'singers.id')->first();
         Song::where('id', $entry)->update(['listen_count' => $searchResult->listen_count + 1]);
         return response()->json($searchResult);
     }
