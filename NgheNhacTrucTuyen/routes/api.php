@@ -43,6 +43,7 @@ Route::post('/song/search', [SongController::class, 'Search']);
 Route::post('/song/getsong', [SongController::class, 'GetSong']);
 Route::post('/song/gettopsong', [SongController::class, 'GetTopSongs']);
 Route::post('/song/searchbysinger', [SongController::class, 'searchSongsBySinger']);
+Route::get('/song/getinfor', [SongController::class, 'OnlyGetInfo']);
 Route::post('/song/playlist/get', [SongController::class, 'GetSongFromPlaylist']);
 Route::delete('/song', [SongController::class, 'DeleteSong']);
 
