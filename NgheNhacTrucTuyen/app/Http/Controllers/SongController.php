@@ -64,6 +64,11 @@ class SongController extends Controller {
         return response()->json($searchResult);
     }
 
+    public function GetNewSong(Request $request) {
+        $newSong = Song::select('songs.id', 'title', 'singers.urlAvatar as file_path', 'singers.name as artist', 'singerID', 'genre', 'listen_count')->join('singers', 'songs.singerID', '=', 'singers.id')->orderBy('id', 'desc')->take(6)->get();
+        return response()->json($newSong);
+    }
+
     public function OnlyGetInfo() {
         $output = Song::select('songs.id', 'songs.title', 'singers.name as artist', 'singers.urlAvatar as urlPic', 'songs.genre')->join('singers', 'songs.singerID', '=', 'singers.id')->get();
 
