@@ -117,7 +117,6 @@ class SongController extends Controller {
 
     public function SearchBar(Request $request) {
         $entry = $request->input('entry');
-<<<<<<< HEAD
         $song = Song::where('title', 'LIKE', '%' . $entry . '%')
             ->select('songs.id','songs.title','singers.name as singerName')
             ->join('singers', 'songs.singerID', '=', 'singers.id')
@@ -125,11 +124,6 @@ class SongController extends Controller {
         $artist = Singer::where('name', 'LIKE', '%' . $entry . '%')->get();
         $count = $song->count() + $artist->count();
         return response()->json(['song' => $song, 'artist' => $artist,'count'=>$count]);
-=======
-        $song = Song::select('songs.id', 'title', 'singers.name as artist', 'listen_count',)->join('singers', 'songs.singerID', '=', 'singers.id')->where('title', 'LIKE', '%' . $entry . '%')->get();
-        $artist = Singer::where('name', 'LIKE', '%' . $entry . '%')->get();
-        return response()->json(['songs' => $song, 'artists' => $artist, 'count' => $song->count() + $artist->count()]);
->>>>>>> 0a2ca96200f129e3ced9c0c84b460090f48baa30
     }
 }
 
