@@ -87,7 +87,7 @@ class SongController extends Controller {
 
     public function GetSongFromPlaylist(Request $request) {
         $playlist_id = $request->input('playlist_id');
-        $songsInPlaylist = Song::select('songs.id', 'songs.title as song_name', 'singers.name as singer_name')->join('playlist_songs', 'songs.id', '=', 'playlist_songs.song_id')->join('singers', 'songs.singerID', '=', 'singers.id')->where('playlist_songs.playlist_id', $playlist_id)->get();
+        $songsInPlaylist = Song::select('songs.id', 'songs.title as song_name', 'singers.name as singer_name','singers.urlAvatar as urlAvatar')->join('playlist_songs', 'songs.id', '=', 'playlist_songs.song_id')->join('singers', 'songs.singerID', '=', 'singers.id')->where('playlist_songs.playlist_id', $playlist_id)->get();
         return response()->json(['list' => $songsInPlaylist, 'count' => $songsInPlaylist->count()]);
     }
 
@@ -118,9 +118,13 @@ class SongController extends Controller {
 
     public function SearchBar(Request $request) {
         $entry = $request->input('entry');
-        $song = Song::where('title', 'LIKE', '%' . $entry . '%')->get();
+        $song = Song::where('title', 'LIKE', '%' . $entry . '%')
+            ->select('songs.id','songs.title','singers.name as singerName')
+            ->join('singers', 'songs.singerID', '=', 'singers.id')
+            ->get();
         $artist = Singer::where('name', 'LIKE', '%' . $entry . '%')->get();
-        return response()->json(['song' => $song, 'artist' => $artist]);
+        $count = $song->count() + $artist->count();
+        return response()->json(['song' => $song, 'artist' => $artist,'count'=>$count]);
     }
 }
 

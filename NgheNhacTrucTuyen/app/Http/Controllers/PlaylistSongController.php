@@ -46,11 +46,15 @@ class PlaylistSongController extends Controller {
     public function removeSongFromPlaylist(Request $request) {
         $playlistID = $request->input('playlist_id');
         $songID = $request->input('song_id');
-        $playlistSong = PlaylistSong::where('playlist_id', $playlistID)->andWhere('song_id', $songID)->first();
+
+        $playlistSong = PlaylistSong::where('playlist_id', $playlistID)->where('song_id', $songID)->first();
+
         if (!$playlistSong) {
             return response()->json(['message' => 'Playlist-song không tồn tại'], 404);
         }
-        PlaylistSong::where('playlist_id', $playlistID)->andWhere('song_id', $songID)->delete();
+
+        PlaylistSong::where('playlist_id', $playlistID)->where('song_id', $songID)->delete();
+
         return response()->json(['message' => 'Song deleted from playlist'], 200);
     }
 
