@@ -11,9 +11,9 @@ class GenreController extends Controller {
     public function GetGenre(Request $request) {
         if ($request->has('id')) {
             $id = $request->input('id');
-            return response()->json(Genre::where('id', $id)->select('name', 'description')->first());
+            return response()->json(Genre::where('id', $id)->select('name', 'description','urlPic')->first());
         }
-        $output = Genre::select('id', 'name', 'description')->get();
+        $output = Genre::select('id', 'name', 'description','urlPic')->get();
         return response()->json($output);
     }
 
