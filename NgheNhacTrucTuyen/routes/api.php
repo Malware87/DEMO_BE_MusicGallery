@@ -48,6 +48,7 @@ Route::post('/song/searchbysinger', [SongController::class, 'searchSongsBySinger
 Route::get('/song/getinfor', [SongController::class, 'OnlyGetInfo']);
 Route::post('/song/playlist/get', [SongController::class, 'GetSongFromPlaylist']);
 Route::delete('/song', [SongController::class, 'DeleteSong']);
+Route::get('/song/new', [SongController::class, 'GetNewSong']);
 
 // Genre routes
 Route::get('/genre', [GenreController::class, 'GetGenre']);
